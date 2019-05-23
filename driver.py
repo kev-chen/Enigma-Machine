@@ -1,26 +1,36 @@
 #!/usr/bin/python3
 
-import sys
+from config import Config
 from enigma import Enigma
 
 def main():
+    Config.readKeys()
+
+    enigma = Enigma(Config.setting('key1'), Config.setting('key2'), Config.setting('key3'))
+    print('Enigma... Press Ctrl+D to stop')
+    print('Commands:\n    encrypt <message>\n    decrypt <message>')
+
     try:
-        key1 = sys.argv[1]
-        key2 = sys.argv[2]
-    except KeyError as e:
-        key1 = input('key1=')
-        key2 = input('key2=')
+        while True:
+            command = input('> ')
+            try:
+                spaceIndex = command.index(' ')
+            except:
+                print('Invalid command:')
+                print('Commands:\n    encrypt <message>\n    decrypt <message>')
+                continue
 
-    enigma = Enigma(key1, key2)
-    print('Enigma. Press Ctrl+D to stop.')
-    while True:
-        command = input('> ')
-        spaceIndex = command.index(' ')
+            if command[:spaceIndex] == 'encrypt':
+                print(enigma.encrypt(command[spaceIndex+1:]))
+            elif command[:spaceIndex] == 'decrypt':
+                print(enigma.decrypt(command[spaceIndex+1:]))
+            else:
+                print('Invalid command')
+                print('Commands:\n    encrypt <message>\n    decrypt <message>')           
 
-        if command[:spaceIndex] == 'encrypt':
-            print(enigma.encrypt(command[spaceIndex+1:]))
-        elif command[:spaceIndex] == 'decrypt':
-            print(enigma.decrypt(command[spaceIndex+1:]))
+
+    except (EOFError, KeyboardInterrupt):
+        print() # Put the standard shell prompt on the next line
 
 
 

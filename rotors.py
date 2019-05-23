@@ -4,16 +4,18 @@ from config import Config
 from util import rotate
 
 class Rotors:
-    def __init__(self, left, middle, right, key):
-        self.key = key
-        self.originalLeftRotor = left
-        self.originalMiddleRotor = middle
-        self.originalRightRotor = right
+    def __init__(self, left, middle, right, key3):
+        # Keep track of the original positions
+        self.originalLeftRotor = rotate(left, Config.setting('characters')[key3[0]])
+        self.originalMiddleRotor = rotate(middle, Config.setting('characters')[key3[1]])
+        self.originalRightRotor = rotate(right, Config.setting('characters')[key3[2]])
 
-        self.leftRotor = left
-        self.middleRotor = middle
-        self.rightRotor = right
+        # Rotate these when encrypting/decrypting
+        self.leftRotor = self.originalLeftRotor
+        self.middleRotor = self.originalMiddleRotor
+        self.rightRotor = self.originalRightRotor
 
+        # Wiring between rotors
         self.rightToMiddle = None
         self.middleToLeft = None
         self.leftToMiddle = None
@@ -36,7 +38,6 @@ class Rotors:
 
 
 
-
     '''
      Rotates wheels forward based on the rotation rates of each wheel
     '''
@@ -51,24 +52,6 @@ class Rotors:
             self.leftRotor = rotate(self.leftRotor, 1)
 
         self.setRotorWiring(self.leftRotor, self.middleRotor, self.rightRotor)
-
-
-
-    '''
-     Rotates wheels backward based on the rotation rates of each wheel
-    '''
-    def rotateBackward(self, numCharactersTyped):
-        if numCharactersTyped % Config.setting('rightRotorRate') == 0:
-            self.rightRotor = rotate(self.rightRotor, -1)
-        
-        if numCharactersTyped % Config.setting('middleRotorRate') == 0:
-            self.middleRotor = rotate(self.middleRotor, -1)
-        
-        if numCharactersTyped % Config.setting('leftRotorRate') == 0:
-            self.leftRotor = rotate(self.leftRotor, -1)
-
-        self.setRotorWiring(self.leftRotor, self.middleRotor, self.rightRotor)
-
 
 
     '''
