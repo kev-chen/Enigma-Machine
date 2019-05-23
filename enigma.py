@@ -2,6 +2,7 @@
 import string
 from util import rotate
 from rotors import Rotors
+from config import Config
 
 class Enigma:
     def __init__(self, key1, key2, key3):
@@ -9,12 +10,7 @@ class Enigma:
         self.backwardPlugboard = { value: key for key,value in self.forwardPlugboard.items() }
         self.forwardReflector = self.forwardPlugboard
         self.backwardReflector = self.backwardPlugboard
-
-        self.rotors = Rotors(\
-                        ['2', 'y', 'z', '0', '1', 'a', 'w', 'i', 'p', 'k', 's', 'n', '3', 't', 'e', 'r', 'm', 'u', 'c', '5', 'v', '6', 'x', '7', 'f', 'q', 'o', 'l', '4', '8', 'g', 'd', '9', 'b', 'j', 'h'], \
-                        ['0', 'l', 'x', '1', '2', '8', 'h', 'b', '3', 'n', 'r', 'o', 'k', 'd', 't', '7', 'c', '6', 'p', 'i', 'v', 'j', '4', 'a', 'u', 'w', 'm', 'e', '9', '5', 'q', 's', 'z', 'g', 'y', 'f'], \
-                        ['3', '5', 'h', 'e', 'f', 'g', 'd', 'q', '8', 'm', '2', 'k', 'l', 'j', 'n', 's', 'u', 'w', 'o', 'v', 'r', 'x', 'z', 'c', 'i', '9', 't', '7', 'b', 'p', 'a', '0', '1', 'y', '6', '4'], \
-                        key3)
+        self.rotors = Rotors(Config.setting('leftRotor'), Config.setting('middleRotor'), Config.setting('rightRotor'), key3)
 
 
                         
