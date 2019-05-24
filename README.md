@@ -19,7 +19,7 @@ The supported characters, wheel wirings, and wheel rotation rates can be specifi
 
 
 ## Usage
-Ensuring that all files, including keys.json, are in working directory, run driver.py from the command line.
+Ensuring that all files, including `keys.json`, are in the working directory, run `driver.py` from the command line.
   ```
     python3 driver.py
   ```
