@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 '''
-    Cyclically rotates and array
+    Cyclically rotates an array
 '''
 def rotate(collection, rotateAmount):
     if rotateAmount > 0:
