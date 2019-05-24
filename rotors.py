@@ -6,35 +6,32 @@ from util import rotate
 class Rotors:
     def __init__(self, left, middle, right, key3):
         # Keep track of the original positions
-        self.originalLeftRotor = rotate(left, Config.setting('characters')[key3[0]])
-        self.originalMiddleRotor = rotate(middle, Config.setting('characters')[key3[1]])
-        self.originalRightRotor = rotate(right, Config.setting('characters')[key3[2]])
+        self.originalLeftRotor = rotate([ch.upper() for ch in left], Config.setting('characters')[key3[0]])
+        self.originalMiddleRotor = rotate([ch.upper() for ch in middle], Config.setting('characters')[key3[1]])
+        self.originalRightRotor = rotate([ch.upper() for ch in right], Config.setting('characters')[key3[2]])
 
         # Rotate these when encrypting/decrypting
         self.leftRotor = self.originalLeftRotor
         self.middleRotor = self.originalMiddleRotor
         self.rightRotor = self.originalRightRotor
-
-        # Wiring between rotors
-        self.rightToMiddle = None
-        self.middleToLeft = None
-        self.leftToMiddle = None
-        self.middleToRight = None
         self.setRotorWiring(self.leftRotor, self.middleRotor, self.rightRotor)
 
 
 
     '''
-     Sets the "wirings" between wheels
+     Sets the wheel mappings between wheels
     '''
     def setRotorWiring(self, left, middle, right):
-         # Right to left mappings
-        self.rightToMiddle = dict(zip(right, middle))
-        self.middleToLeft = dict(zip(middle, left))
-        
-        # Left to right mappings
-        self.leftToMiddle = dict(zip(left, middle))
-        self.middleToRight = dict(zip(middle, right))
+        availableCharacters = list(Config.setting('characters').keys())
+
+        self.rightForward = dict(zip(availableCharacters, right))
+        self.rightBackward = { value: key for key,value in self.rightForward.items() }
+
+        self.middleForward = dict(zip(availableCharacters, middle))
+        self.middleBackward = { value: key for key,value in self.middleForward.items() }
+
+        self.leftForward = dict(zip(availableCharacters, left))
+        self.leftBackward = { value: key for key,value in self.leftForward.items() }
 
 
 
@@ -52,6 +49,7 @@ class Rotors:
             self.leftRotor = rotate(self.leftRotor, 1)
 
         self.setRotorWiring(self.leftRotor, self.middleRotor, self.rightRotor)
+
 
 
     '''

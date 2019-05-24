@@ -6,10 +6,10 @@ from config import Config
 
 class Enigma:
     def __init__(self, key1, key2, key3):
-        self.forwardPlugboard = dict(zip(key1, key2))
-        self.backwardPlugboard = { value: key for key,value in self.forwardPlugboard.items() }
-        self.forwardReflector = self.forwardPlugboard
-        self.backwardReflector = self.backwardPlugboard
+        self.forwardPlugboard = dict(zip(list(Config.setting('characters').keys()), key1))      # Available Characters - key1 mapping
+        self.backwardPlugboard = { value: key for key,value in self.forwardPlugboard.items() }  # Inverse mapping
+        self.forwardReflector = dict(zip(list(Config.setting('characters').keys()), key2))      # Available Characters - key2 mapping
+        self.backwardReflector = { value: key for key,value in self.forwardReflector.items() }  # Inverse mapping
         self.rotors = Rotors(Config.setting('leftRotor'), Config.setting('middleRotor'), Config.setting('rightRotor'), key3)
 
 
@@ -22,8 +22,8 @@ class Enigma:
         numCharactersTyped = 0
         for char in input:
             numCharactersTyped += 1
-            strBuffer.append( self.getEncryptedValue(char.upper()) )
             self.rotors.rotateForward(numCharactersTyped)
+            strBuffer.append( self.getEncryptedValue(char.upper()) )
         
         self.rotors.reset()
         
@@ -39,8 +39,8 @@ class Enigma:
         numCharactersTyped = 0
         for char in input:
             numCharactersTyped += 1
-            strBuffer.append( self.getDecryptedValue(char.upper()) )
             self.rotors.rotateForward(numCharactersTyped)
+            strBuffer.append( self.getDecryptedValue(char.upper()) )
 
         self.rotors.reset()
         
@@ -64,7 +64,7 @@ class Enigma:
         encryptedChar = self.passThroughLeft2Right(encryptedChar)
 
         # 4. Pass back through plugboard
-        encryptedChar = self.backwardPlugboard[encryptedChar.upper()]
+        encryptedChar = self.backwardPlugboard[encryptedChar]
 
         return encryptedChar
 
@@ -86,7 +86,7 @@ class Enigma:
         encryptedChar = self.passThroughLeft2Right(encryptedChar)
 
         # 4. Pass back through plugboard
-        encryptedChar = self.backwardPlugboard[encryptedChar.upper()]
+        encryptedChar = self.backwardPlugboard[encryptedChar]
 
         return encryptedChar
 
@@ -96,12 +96,11 @@ class Enigma:
      Passes through the rotors from right to left
     '''
     def passThroughRight2Left(self, char):
-        entryChar = char.lower()
+        returnChar = self.rotors.rightForward[char]
+        returnChar = self.rotors.middleForward[returnChar]
+        returnChar = self.rotors.leftForward[returnChar]
 
-        returnChar = self.rotors.rightToMiddle[entryChar]
-        returnChar = self.rotors.middleToLeft[returnChar]
-
-        return returnChar.upper()
+        return returnChar
 
 
 
@@ -109,9 +108,8 @@ class Enigma:
      Passes through the rotors from left to right
     '''
     def passThroughLeft2Right(self, char):
-        entryChar = char.lower()
+        returnChar = self.rotors.leftBackward[char]
+        returnChar = self.rotors.middleBackward[returnChar]
+        returnChar = self.rotors.rightBackward[returnChar]
 
-        returnChar = self.rotors.leftToMiddle[entryChar]
-        returnChar = self.rotors.middleToRight[returnChar]
-
-        return returnChar.upper()
+        return returnChar
