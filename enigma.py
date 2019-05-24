@@ -18,16 +18,20 @@ class Enigma:
      Encrypts an entire input string
     '''
     def encrypt(self, input):
-        strBuffer = list()
-        numCharactersTyped = 0
-        for char in input:
-            numCharactersTyped += 1
-            self.rotors.rotateForward(numCharactersTyped)
-            strBuffer.append( self.getEncryptedValue(char.upper()) )
-        
-        self.rotors.reset()
-        
-        return ''.join(strBuffer)
+        try:
+            strBuffer = list()
+            numCharactersTyped = 0
+            for char in input:
+                numCharactersTyped += 1
+                self.rotors.rotateForward(numCharactersTyped)
+                strBuffer.append( self.getEncryptedValue(char.upper()) )
+            return ''.join(strBuffer)
+
+        except Exception as e:
+            return f'Error encrypting: {str(e)}'
+
+        finally:
+            self.rotors.reset()
 
 
 
@@ -35,16 +39,20 @@ class Enigma:
      Decrypts an entire input string
     '''
     def decrypt(self, input):
-        strBuffer = list()
-        numCharactersTyped = 0
-        for char in input:
-            numCharactersTyped += 1
-            self.rotors.rotateForward(numCharactersTyped)
-            strBuffer.append( self.getDecryptedValue(char.upper()) )
+        try:
+            strBuffer = list()
+            numCharactersTyped = 0
+            for char in input:
+                numCharactersTyped += 1
+                self.rotors.rotateForward(numCharactersTyped)
+                strBuffer.append( self.getDecryptedValue(char.upper()) )
+            return ''.join(strBuffer)
 
-        self.rotors.reset()
-        
-        return ''.join(strBuffer)
+        except Exception as e:
+            return f'Error decrypting: {str(e)}'
+            
+        finally:
+            self.rotors.reset()
 
 
 
