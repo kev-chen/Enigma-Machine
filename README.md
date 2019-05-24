@@ -7,7 +7,7 @@ Enigma Machine with variations
 
 
 ## Configuration
-The encryption/decryption is reliant on keys being specified in the keys.json file alongside the rest of the files.
+The encryption/decryption is reliant on keys being specified in the `keys.json` file alongside the rest of the files.
 
 | Key  | Description |
 | ---  | ----------- |
